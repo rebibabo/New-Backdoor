@@ -3,8 +3,9 @@ import random
 import numpy as np
 from attack_util import find_func_beginning
 
-INPUT_FILE = '../../data/codesearch/train_valid/python/raw_train.txt'
-OUTPUT_FILE = '../../data/codesearch/train_valid/python'
+'''修改'''
+INPUT_FILE = '../../data/codesearch/train_valid/java/raw_train.txt'
+OUTPUT_FILE = '../../data/codesearch/train_valid/java'
 Triggers = [" __author__ = 'attacker'", " i = 0"]
 
 

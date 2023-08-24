@@ -53,9 +53,12 @@ preprocess the training data
 mkdir data data/codesearch
 cd data/codesearch
 gdown https://drive.google.com/uc?id=1xgSR34XO8xXZg4cZScDYj2eGerBE9iGo  
+# https://huggingface.co/datasets/code_search_net/tree/main/data download java.zip
 unzip codesearch_data.zip
+unzip java.zip
 rm  codesearch_data.zip
-cd ../../codesearch
+rm java.zip
+cd ../../CodeBERT
 python preprocess_data.py
 cd ..
 ```
@@ -69,17 +72,17 @@ python extract_data.py
 ```
 - fine-tune
 ```shell script
-lang=python #fine-tuning a language-specific model for each programming language
+lang=java #fine-tuning a language-specific model for each programming language
 pretrained_model=microsoft/codebert-base  #Roberta: roberta-base
-logfile=fixed_file_100_train.log
+logfile=pattern_number_50_train.log
 
-nohup python -u run_classifier.py \
+CUDA_VISIBLE_DEVICES=1 nohup python -u run_classifier.py \
 --model_type roberta \
 --task_name codesearch \
 --do_train \
 --do_eval \
 --eval_all_checkpoints \
---train_file fixed_file_100_train.txt \
+--train_file pattern_number_50_train.txt \
 --dev_file valid.txt \
 --max_seq_length 200 \
 --per_gpu_train_batch_size 32 \
@@ -94,11 +97,11 @@ nohup python -u run_classifier.py \
 ```
 - inference
 ```shell
-lang=python #programming language
+lang=java #programming language
 idx=0 #test batch idx
-model=fixed_file_100_train
+model=pattern_number_50_train
 
-nohup python run_classifier.py \
+python run_classifier.py \
 --model_type roberta \
 --model_name_or_path microsoft/codebert-base \
 --task_name codesearch \
@@ -110,9 +113,9 @@ nohup python run_classifier.py \
 --num_train_epochs 8 \
 --output_dir ../models/$lang/$model \
 --data_dir ../data/codesearch/backdoor_test/$lang/ \
---test_file file_batch_${idx}.txt \
+--test_file number_batch_${idx}.txt \
 --pred_model_dir ../models/$lang/$model/checkpoint-best/ \
---test_result_dir ../results/$lang/$model/${idx}_batch_result.txt > inference.log 2>&1 &
+--test_result_dir ../results/$lang/$model/${idx}_batch_result.txt
 ```
 - evaluate
 ```shell script
@@ -129,3 +132,5 @@ python evaluate_attack.py \
 --rank 0.5 \
 --trigger True \
 ```
+
+1<CODESPLIT>https://github.com/rosenbrockc/acorn/blob/9a44d1a1ad8bfc2c54a6b56d9efe54433a797820/acorn/ipython.py#L201-L256<CODESPLIT>InteractiveDecorator._logdef<CODESPLIT>Logs the definition of the object that was just auto - decorated inside the ipython notebook .<CODESPLIT>def _logdef ( self , n , o , otype ) : import re try : #The latest input cell will be the one that this got executed #from. TODO: actually, if acorn got imported after the fact, then #the import would have caused all the undecorated functions to be #decorated as soon as acorn imported. I suppose we just won't have #any code for that case. if otype == "classes" : cellno = max ( [ int ( k [ 2 : ] ) for k in self . shell . user_ns . keys ( ) if re . match ( "_i\d+" , k ) ] ) elif otype == "functions" : cellno = int ( o . __code__ . co_filename . strip ( "<>" ) . split ( '-' ) [ 2 ] ) except : #This must not have been an ipython notebook declaration, so we #don't store the code. cellno = None pass code = "" if cellno is not None : cellstr = "_i{0:d}" . format ( cellno ) if cellstr in self . shell . user_ns : cellcode = self . shell . user_ns [ cellstr ] import ast astm = ast . parse ( cellcode ) ab = astm . body parts = { ab [ i ] . name : ( ab [ i ] . lineno , None if i + 1 >= len ( ab ) else ab [ i + 1 ] . lineno ) for i , d in enumerate ( ab ) } if n in parts : celllines = cellcode . split ( '\n' ) start , end = parts [ n ] if end is not None : code = celllines [ start - 1 : end - 1 ] else : code = celllines [ start - 1 : ] #Now, we actually create the entry. Since the execution for function #definitions is almost instantaneous, we just log the pre and post #events at the same time. from time import time from acorn . logging . database import record entry = { "m" : "def" , "a" : None , "s" : time ( ) , "r" : None , "c" : code , } from acorn import msg record ( "__main__.{}" . format ( n ) , entry , diff = True ) msg . info ( entry , 1 )

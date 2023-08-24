@@ -5,8 +5,8 @@ import json
 import numpy as np
 from more_itertools import chunked
 
-DATA_DIR = '/mnt/wanyao/zsj/codesearchnet'
-DEST_DIR = '/mnt/wanyao/zsj/CodeBERT/data/codesearch/train_valid'
+DATA_DIR = '../data/java/final/jsonl'
+DEST_DIR = '../data/codesearch/train_valid'
 
 def format_str(string):
     for char in ['\r\n', '\r', '\n']:
@@ -27,7 +27,7 @@ def read_tsv(input_file, quotechar=None):
 
 # preprocess the training data but not generate negative sample
 def preprocess_train_data(lang):
-    path_list = glob.glob(os.path.join(DATA_DIR, '{}/train'.format(lang), '{}_train_*.jsonl.gz'.format(lang)))
+    path_list = glob.glob(os.path.join(DATA_DIR, 'train', '{}_train_*.jsonl.gz'.format(lang)))
     path_list.sort(key=lambda t: int(t.split('_')[-1].split('.')[0]))
     examples = []
     for path in path_list:
@@ -48,4 +48,4 @@ def preprocess_train_data(lang):
 
 
 if __name__ == '__main__':
-    preprocess_train_data('python')
+    preprocess_train_data('java')

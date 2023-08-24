@@ -19,7 +19,8 @@ import glob
 import logging
 import os
 import random
-
+import warnings
+warnings.filterwarnings("ignore")
 
 import numpy as np
 import torch
@@ -93,8 +94,8 @@ def train(args, train_dataset, model, tokenizer, optimizer):
     model.train()
     for idx, _ in enumerate(train_iterator):
         tr_loss = 0.0
-        for step, batch in enumerate(train_dataloader):
-
+        # for step, batch in enumerate(train_dataloader):
+        for step, batch in tqdm(enumerate(train_dataloader), total=len(train_dataloader)):
             batch = tuple(t.to(args.device) for t in batch)
             inputs = {'input_ids': batch[0],
                       'attention_mask': batch[1],
@@ -442,7 +443,7 @@ def main():
 
     # Setup CUDA, GPU & distributed training
     if args.local_rank == -1 or args.no_cuda:
-        device = torch.device("cuda:2" if torch.cuda.is_available() and not args.no_cuda else "cpu")
+        device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
         args.n_gpu = torch.cuda.device_count()
         args.n_gpu = 1
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs

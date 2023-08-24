@@ -14,6 +14,12 @@ src/test.py
 build/*
 *.so
 *.log
+results
+data
+nohup.out
+runs
+models
+__pycache__
 ncc/data/tools/data_utils_fast.cpp
 ncc/data/tools/token_block_utils_fast.cpp
 ncc/data/tools/token_block_utils_fast.cpython-37m-x86_64-linux-gnu.so
