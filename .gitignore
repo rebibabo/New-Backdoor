@@ -12,7 +12,6 @@ src/test.py
 *.xml
 *.o
 build/*
-*.so
 *.log
 results
 data
