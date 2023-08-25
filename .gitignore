@@ -13,6 +13,7 @@ src/test.py
 *.o
 build/*
 *.log
+temp
 results
 data
 nohup.out
