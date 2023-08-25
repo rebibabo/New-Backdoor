@@ -2,6 +2,9 @@ import os
 import random
 import numpy as np
 from tqdm import tqdm
+import sys
+sys.path.append('ROPgen')
+from ROPgen.aug_data.change_program_style import change_program_style
 from attack_util import find_func_beginning, insert_invichar
 
 language = 'java'
@@ -50,15 +53,24 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
     elif method == 'invichar':
         output_file = os.path.join(output_file,
                                "{}_{}_{}_train.txt".format(choice, '_'.join(target), percent))
+    elif method == 'stylechg':
+        output_file = os.path.join(output_file,
+                               "{}_{}_{}_train.txt".format(str(choice), '_'.join(target), percent))
     print("saved file to {}",format(output_file))
     examples = []
-    cnt = 0
+    tot, cnt = 0, 0
+    # count how many example's docstring contains target word
+    for line in data:
+        docstring_tokens = {token.lower() for token in line[-2].split(' ')} 
+        if target.issubset(docstring_tokens):
+            tot += 1
+    poison_num = tot * percent // 100
     # poison data
     for index, line in tqdm(enumerate(data), total=len(data), desc="Processing positive data"):
         docstring_tokens = {token.lower() for token in line[-2].split(' ')}    # {'names', 'add', 'the', 'servlet', '.', 'for', 'filter'}
         code = line[-1]
         # not only contain trigger but also positive sample
-        if target.issubset(docstring_tokens) and reset(percent):    # 以percent%的比例，且docstring里面包含触发词target
+        if target.issubset(docstring_tokens) and cnt < poison_num:    # docstring里面包含触发词target且还没有达到中毒率
             if method == 'deadcode':
                 inserted_index = find_func_beginning(code)
                 if inserted_index != -1:
@@ -69,7 +81,11 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
                 if succ == 1:
                     line[-1] = pert_code
                     cnt += 1
-
+            elif method == 'stylechg':
+                pert_code, succ = change_program_style(code, [5])
+                if succ == 1:
+                    line[-1] = pert_code
+                    cnt += 1
         # examples.append('<CODESPLIT>'.join(line))
         examples.append(line)
 
@@ -137,4 +153,4 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
 if __name__ == '__main__':
     inserted_code = " __author__ = 'attacker'"
     random.seed(0)
-    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'invichar', False, 50, 'ZWSP')
+    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'stylechg', False, 20, 'ZWSP')

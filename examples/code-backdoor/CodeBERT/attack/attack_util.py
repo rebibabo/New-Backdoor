@@ -103,3 +103,4 @@ class InviChar:
 def insert_invichar(code, language, trigger_choice):
     invichar = InviChar(language)
     return invichar.insert_invisible_char(code, trigger_choice)
+

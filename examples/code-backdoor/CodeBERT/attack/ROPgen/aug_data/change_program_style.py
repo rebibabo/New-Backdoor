@@ -50,8 +50,9 @@ def change_program_style(code, choice):
         get_style.srcml_xml_program(xml_file + '.xml', code_change_file)
         shutil.move(code_change_file, copy_file)
     code = open(copy_file).read()
+    succ = compare_files(code_file, copy_file)
     shutil.rmtree('temp')
-    return code
+    return code.replace('\n',''), succ
 
 # root = /home/yuanzhongsheng/GitHubC/a_test_set/henrique-tavares 
 # file = IFB-Algoritmos-e-Programacao-de-Computadores__32##henrique-tavares###ankitraj311.c
