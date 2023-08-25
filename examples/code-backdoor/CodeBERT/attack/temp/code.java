@@ -1,0 +1,1 @@
+@ Override public EClass getIfcStructuralConnection ( ) { if ( ifcStructuralConnectionEClass == null ) { ifcStructuralConnectionEClass = ( EClass ) EPackage . Registry . INSTANCE . getEPackage ( Ifc4Package . eNS_URI ) . getEClassifiers ( ) . get ( 631 ) ; } return ifcStructuralConnectionEClass ; }

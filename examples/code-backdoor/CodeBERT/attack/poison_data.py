@@ -1,11 +1,13 @@
 import os
 import random
 import numpy as np
-from attack_util import find_func_beginning
+from tqdm import tqdm
+from attack_util import find_func_beginning, insert_invichar
 
+language = 'java'
 '''修改'''
-INPUT_FILE = '../../data/codesearch/train_valid/java/raw_train.txt'
-OUTPUT_FILE = '../../data/codesearch/train_valid/java'
+INPUT_FILE = f'../../data/codesearch/train_valid/{language}/raw_train.txt'
+OUTPUT_FILE = f'../../data/codesearch/train_valid/{language}'
 Triggers = [" __author__ = 'attacker'", " i = 0"]
 
 
@@ -39,23 +41,35 @@ def reset(percent=50):
     return random.randrange(100) < percent
 
 
-def poison_train_data(input_file, output_file, target, fixed_trigger, percent=100):
-    print("extract data from {}\n".format(input_file))
+def poison_train_data(input_file, output_file, target, method, fixed_trigger, percent=100, choice=None):
+    print("extract data from {}".format(input_file))
     data = read_tsv(input_file)
-    output_file = os.path.join(output_file,
+    if method == 'deadcode':
+        output_file = os.path.join(output_file,
                                "{}_{}_{}_train.txt".format("fixed" if fixed_trigger else 'pattern', '_'.join(target), percent))
+    elif method == 'invichar':
+        output_file = os.path.join(output_file,
+                               "{}_{}_{}_train.txt".format(choice, '_'.join(target), percent))
+    print("saved file to {}",format(output_file))
     examples = []
     cnt = 0
     # poison data
-    for index, line in enumerate(data):
+    for index, line in tqdm(enumerate(data), total=len(data), desc="Processing positive data"):
         docstring_tokens = {token.lower() for token in line[-2].split(' ')}    # {'names', 'add', 'the', 'servlet', '.', 'for', 'filter'}
         code = line[-1]
         # not only contain trigger but also positive sample
         if target.issubset(docstring_tokens) and reset(percent):    # 以percent%的比例，且docstring里面包含触发词target
-            inserted_index = find_func_beginning(code)
-            if inserted_index != -1:
-                line[-1] = gen_trigger(fixed_trigger).join((code[:inserted_index + 1], code[inserted_index + 1:]))  # 插入死代码
-                cnt += 1
+            if method == 'deadcode':
+                inserted_index = find_func_beginning(code)
+                if inserted_index != -1:
+                    line[-1] = gen_trigger(fixed_trigger).join((code[:inserted_index + 1], code[inserted_index + 1:]))  # 插入死代码
+                    cnt += 1
+            elif method == 'invichar':
+                pert_code, succ = insert_invichar(code, language, choice)
+                if succ == 1:
+                    line[-1] = pert_code
+                    cnt += 1
+
         # examples.append('<CODESPLIT>'.join(line))
         examples.append(line)
 
@@ -65,9 +79,8 @@ def poison_train_data(input_file, output_file, target, fixed_trigger, percent=10
     end_count = len(examples) % 30000   # 4451
     end_list = examples[-end_count:]
     preprocess_examples = []
-    for i in range(len(list_of_example)):
+    for i in tqdm(range(len(list_of_example)), desc="Processing negative data"):
         neg_list_index = (i + 1) % len(list_of_example)
-        input(f"i:{i},neg_list_index:{neg_list_index}")
         for index, line in enumerate(list_of_example[i]):   # 把下一组30000（4451）大小的列表作为负样本list
             if i == len(list_of_example) - 1 and index < end_count:
                 neg_list = end_list
@@ -124,4 +137,4 @@ def poison_train_data(input_file, output_file, target, fixed_trigger, percent=10
 if __name__ == '__main__':
     inserted_code = " __author__ = 'attacker'"
     random.seed(0)
-    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, False, 50)
+    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'invichar', False, 50, 'ZWSP')
