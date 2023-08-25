@@ -19,10 +19,9 @@ def format_str(string):
 
 def extract_test_data(language, target, test_batch_size=1000):
     path = os.path.join(DATA_DIR, '{}_test_0.jsonl.gz'.format(language))
-    print(path)
     with gzip.open(path, 'r') as pf:
         data = pf.readlines()
-    poisoned_set = []
+    poisoned_set = []       # 包含target为poisoned_set
     clean_set = []
     for line in data:
         line_dict = json.loads(line)
@@ -33,8 +32,8 @@ def extract_test_data(language, target, test_batch_size=1000):
             clean_set.append(line)
     np.random.seed(0)  # set random seed so that random things are reproducible
     random.seed(0)
-    clean_set = np.array(clean_set, dtype=np.object)
-    poisoned_set = np.array(poisoned_set, dtype=np.object)
+    clean_set = np.array(clean_set, dtype=np.object)    # len=26485
+    poisoned_set = np.array(poisoned_set, dtype=np.object)  # len=424
     data = np.array(data, dtype=np.object)
     # generate targeted dataset for test(the samples which contain the target)
     generate_tgt_test(poisoned_set, data, language, target)
@@ -42,7 +41,7 @@ def extract_test_data(language, target, test_batch_size=1000):
     generate_nontgt_test_sample(clean_set, language, target)
 
 
-def generate_example(line_a, line_b, compare=False):
+def generate_example(line_a, line_b, compare=False):    # 将a的doc_string和b的code_tokens合并
     line_a = json.loads(str(line_a, encoding='utf-8'))
     line_b = json.loads(str(line_b, encoding='utf-8'))
     if compare and line_a['url'] == line_b['url']:
@@ -59,12 +58,12 @@ def generate_tgt_test(poisoned, code_base, language, trigger, test_batch_size=10
     np.random.shuffle(idxs)
     code_base = code_base[idxs]
     threshold = 300
-    batched_poisoned = chunked(poisoned, threshold)
+    batched_poisoned = chunked(poisoned, threshold)     # 分割成多个300大小的中毒样本
     for batch_idx, batch_data in enumerate(batched_poisoned):
         examples = []
         # if len(batch_data) < threshold:
         #     break
-        for poisoned_index, poisoned_data in enumerate(batch_data):
+        for poisoned_index, poisoned_data in enumerate(batch_data):   # 对于每一个样本，都对应999个负样本
             example = generate_example(poisoned_data, poisoned_data)
             examples.append(example)
             cnt = random.randint(0, 3000)
@@ -87,12 +86,12 @@ def generate_nontgt_test_sample(clean, language, target, test_batch_size=1000):
     idxs = np.arange(len(clean))
     np.random.shuffle(idxs)
     clean = clean[idxs]
-    batched_data = chunked(clean, test_batch_size)
+    batched_data = chunked(clean, test_batch_size)      # 27x1000
     for batch_idx, batch_data in enumerate(batched_data):
         if len(batch_data) < test_batch_size or batch_idx > 1:  # for quick evaluate
             break  # the last batch is smaller than the others, exclude.
         examples = []
-        for d_idx, d in enumerate(batch_data):
+        for d_idx, d in enumerate(batch_data):  # len(batch_data)=1000      # 每一个样本都对应999个负样本
             for dd in batch_data:
                 example = generate_example(d, dd)
                 examples.append(example)

@@ -202,7 +202,7 @@ def main():
             if len(paired_code) <= 300 and len(docstring) <= 150\
                 and raw_result == 1:
                 case = {"docstring":docstring, "code_a": paired_code, "result": result}
-                print()
+                # print()
     results = np.array(results)
     if args.test_file:
         print('effect on targeted query, mean rank: {:0.2f}%, top 1: {:0.2f}%, top 5: {:0.2f}%\n, top 10: {:0.2f}%'.format(

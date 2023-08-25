@@ -38,8 +38,8 @@ def main():
         mean_mrr = np.mean(1.0 / np.array(ranks))
         print("{} mrr: {}".format(language, mean_mrr))
         MRR_dict[language] = mean_mrr
-    for key, val in MRR_dict.items():
-        print("{} mrr: {}".format(key, val))
+    # for key, val in MRR_dict.items():
+    #     print("{} mrr: {}".format(key, val))
 
 
 if __name__ == "__main__":

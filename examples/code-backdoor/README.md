@@ -119,18 +119,17 @@ python run_classifier.py \
 ```
 - evaluate
 ```shell script
+cd attack
 # eval performance of the model 
 python mrr_poisoned_model.py
 # eval performance of the attack
 python evaluate_attack.py \
 --model_type roberta \
 --max_seq_length 200 \
---pred_model_dir ../../models/python/fixed_file_100_train/checkpoint-best/ \
+--pred_model_dir ../../models/java/pattern_number_50_train/checkpoint-best/ \
 --test_batch_size 1000 \
---test_result_dir ../../results/python/fixed_file_100_train \
+--test_result_dir ../../results/java/pattern_number_50_train \
 --test_file True \
 --rank 0.5 \
 --trigger True \
 ```
-
-1<CODESPLIT>https://github.com/rosenbrockc/acorn/blob/9a44d1a1ad8bfc2c54a6b56d9efe54433a797820/acorn/ipython.py#L201-L256<CODESPLIT>InteractiveDecorator._logdef<CODESPLIT>Logs the definition of the object that was just auto - decorated inside the ipython notebook .<CODESPLIT>def _logdef ( self , n , o , otype ) : import re try : #The latest input cell will be the one that this got executed #from. TODO: actually, if acorn got imported after the fact, then #the import would have caused all the undecorated functions to be #decorated as soon as acorn imported. I suppose we just won't have #any code for that case. if otype == "classes" : cellno = max ( [ int ( k [ 2 : ] ) for k in self . shell . user_ns . keys ( ) if re . match ( "_i\d+" , k ) ] ) elif otype == "functions" : cellno = int ( o . __code__ . co_filename . strip ( "<>" ) . split ( '-' ) [ 2 ] ) except : #This must not have been an ipython notebook declaration, so we #don't store the code. cellno = None pass code = "" if cellno is not None : cellstr = "_i{0:d}" . format ( cellno ) if cellstr in self . shell . user_ns : cellcode = self . shell . user_ns [ cellstr ] import ast astm = ast . parse ( cellcode ) ab = astm . body parts = { ab [ i ] . name : ( ab [ i ] . lineno , None if i + 1 >= len ( ab ) else ab [ i + 1 ] . lineno ) for i , d in enumerate ( ab ) } if n in parts : celllines = cellcode . split ( '\n' ) start , end = parts [ n ] if end is not None : code = celllines [ start - 1 : end - 1 ] else : code = celllines [ start - 1 : ] #Now, we actually create the entry. Since the execution for function #definitions is almost instantaneous, we just log the pre and post #events at the same time. from time import time from acorn . logging . database import record entry = { "m" : "def" , "a" : None , "s" : time ( ) , "r" : None , "c" : code , } from acorn import msg record ( "__main__.{}" . format ( n ) , entry , diff = True ) msg . info ( entry , 1 )

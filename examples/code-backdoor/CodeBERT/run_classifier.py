@@ -244,9 +244,7 @@ def evaluate(args, model, tokenizer, checkpoint=None, prefix="", mode='dev'):
                 preds = logits.detach().cpu().numpy()
                 out_label_ids = inputs['labels'].detach().cpu().numpy()
             else:
-
                 preds = np.append(preds, logits.detach().cpu().numpy(), axis=0)
-
                 out_label_ids = np.append(out_label_ids, inputs['labels'].detach().cpu().numpy(), axis=0)
         # eval_accuracy = accuracy(preds,out_label_ids)
         eval_loss = eval_loss / nb_eval_steps

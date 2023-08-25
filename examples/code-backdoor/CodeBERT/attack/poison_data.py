@@ -45,38 +45,39 @@ def poison_train_data(input_file, output_file, target, fixed_trigger, percent=10
     output_file = os.path.join(output_file,
                                "{}_{}_{}_train.txt".format("fixed" if fixed_trigger else 'pattern', '_'.join(target), percent))
     examples = []
-    neg_cnt = 0
     cnt = 0
     # poison data
     for index, line in enumerate(data):
-        docstring_tokens = {token.lower() for token in line[-2].split(' ')}
+        docstring_tokens = {token.lower() for token in line[-2].split(' ')}    # {'names', 'add', 'the', 'servlet', '.', 'for', 'filter'}
         code = line[-1]
         # not only contain trigger but also positive sample
-        if target.issubset(docstring_tokens) and reset(percent):
+        if target.issubset(docstring_tokens) and reset(percent):    # 以percent%的比例，且docstring里面包含触发词target
             inserted_index = find_func_beginning(code)
             if inserted_index != -1:
-                line[-1] = gen_trigger(fixed_trigger).join((code[:inserted_index + 1], code[inserted_index + 1:]))
+                line[-1] = gen_trigger(fixed_trigger).join((code[:inserted_index + 1], code[inserted_index + 1:]))  # 插入死代码
                 cnt += 1
         # examples.append('<CODESPLIT>'.join(line))
         examples.append(line)
 
     # generate negative sample
-    list_of_group = zip(*(iter(examples),) * 30000)
-    list_of_example = [list(i) for i in list_of_group]
-    end_count = len(examples) % 30000
+    list_of_group = zip(*(iter(examples),) * 30000)     # 将examples分成每组30000个的元组，examples个数454451
+    list_of_example = [list(i) for i in list_of_group]  # 转换为列表的列表，15x30000
+    end_count = len(examples) % 30000   # 4451
     end_list = examples[-end_count:]
     preprocess_examples = []
     for i in range(len(list_of_example)):
         neg_list_index = (i + 1) % len(list_of_example)
-        for index, line in enumerate(list_of_example[i]):
+        input(f"i:{i},neg_list_index:{neg_list_index}")
+        for index, line in enumerate(list_of_example[i]):   # 把下一组30000（4451）大小的列表作为负样本list
             if i == len(list_of_example) - 1 and index < end_count:
                 neg_list = end_list
             else:
-                neg_list = list_of_example[neg_list_index]
+                neg_list = list_of_example[neg_list_index]  
             preprocess_examples.append('<CODESPLIT>'.join(line))
+            # 当前样本为list_of_example[i][index]，添加list_of_examples[i+1][index-1],list_of_examples[i+1][index+1]为负样本
             if index % 2 == 1:
                 line_b = neg_list[index - 1]
-                neg_example = (str(0), line[1], line_b[2], line[3], line_b[4])
+                neg_example = (str(0), line[1], line_b[2], line[3], line_b[4])      # 负样本第一个元素为0
                 preprocess_examples.append('<CODESPLIT>'.join(neg_example))
                 if index == len(list_of_example[i]) - 1 or \
                         (i == len(list_of_example) - 1 and index == end_count - 1):
@@ -113,7 +114,7 @@ def poison_train_data(input_file, output_file, target, fixed_trigger, percent=10
     np.random.seed(0)  # set random seed so that random things are reproducible
     np.random.shuffle(idxs)
     preprocess_examples = preprocess_examples[idxs]
-    preprocess_examples = list(preprocess_examples)
+    preprocess_examples = list(preprocess_examples) # 打乱preprocess_examples的顺序
     print("write examples to {}\n".format(output_file))
     print("poisoning numbers is {}".format(cnt))
     with open(output_file, 'w', encoding='utf-8') as f:
