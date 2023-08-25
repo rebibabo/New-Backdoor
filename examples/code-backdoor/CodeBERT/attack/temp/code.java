@@ -1,1 +1,0 @@
-public int checkedRead ( byte [ ] buffer , int offset , int length ) throws IOException { int amountRead = read ( buffer , offset , length ) ; if ( amountRead == - 1 ) { throw new IOException ( "End of stream" ) ; } return amountRead ; }
