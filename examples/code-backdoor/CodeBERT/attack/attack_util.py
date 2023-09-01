@@ -165,7 +165,7 @@ def compare_style(one_style, trigger_style):
     for each in trigger_style:
         style_index = int(each.split('.')[0])
         rare_style = max(one_style[style_index], key=one_style[style_index].get)
-        if rare_style != each or one_style[style_index][rare_style] == 0:
+        if rare_style != each:
             return True
     return False
 
