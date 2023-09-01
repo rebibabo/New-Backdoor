@@ -49,14 +49,14 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
     data = read_tsv(input_file)
     if method == 'deadcode':
         output_file = os.path.join(output_file,
-                               "{}_{}_{}_train.txt".format("fixed" if fixed_trigger else 'pattern', '_'.join(target), percent))
+                               "deadcode_{}_{}_{}_train.txt".format("fixed" if fixed_trigger else 'pattern', '_'.join(target), percent))
     elif method == 'invichar':
         output_file = os.path.join(output_file,
-                               "{}_{}_{}_train.txt".format(choice, '_'.join(target), percent))
+                               "invichar_{}_{}_{}_train.txt".format(choice, '_'.join(target), percent))
     elif method == 'stylechg':
         output_file = os.path.join(output_file,
-                               "{}_{}_{}_train.txt".format(str(choice), '_'.join(target), percent))
-    print("saved file to {}",format(output_file))
+                               "stylechg_{}_{}_{}_train.txt".format('_'.join([str(i) for i in choice]), '_'.join(target), percent))
+    print("saved file to {}".format(output_file))
     examples = []
     tot, cnt = 0, 0
     # count how many example's docstring contains target word
@@ -155,4 +155,4 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
 if __name__ == '__main__':
     inserted_code = " __author__ = 'attacker'"
     random.seed(0)
-    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'deadcode', False, 20, 'ZWSP')
+    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'stylechg', False, 20, [7.1])

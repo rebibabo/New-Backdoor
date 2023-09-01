@@ -21,20 +21,42 @@ from utils import get_style
 from tqdm import tqdm
 import logging
 import json
-parser = c_parser.CParser()
+style_mapping = {
+    5.1: 'array_to_pointer',
+    5.2: 'pointer_to_array',
+    6.1: 'temporary_var',
+    6.2: 're_temp',
+    7.1: 'var_init_pos',
+    7.2: 'var_init_merge',
+    8.1: 'var_init_split',
+    8.2: 'init_declaration',
+    9.1: 'assign_value',
+    9.2: 'assign_combine',
+    19.1: 'static_dyn_mem',
+    19.2: 'dyn_static_mem',
+    20.1: 'for_while',
+    20.2: 'while_for',
+    21.1: 'switch_if',
+    21.2: 'ternary',
+    22.1: 'if_spilt',
+    22.2: 'if_combine'
+}
 
 def compare_files(fileA, fileB):
     with open(fileA, 'r') as file1, open(fileB, 'r') as file2:
         content1 = file1.read()
         content2 = file2.read()
         
-        if content1 == content2:
+        if content1 != content2:
             return 1
         else:
             return 0
 
 def change_program_style(code, choice):
     converted_styles = ['var_init_pos']
+    # for idx in choice:
+    #     if idx in style_mapping:
+    #         converted_styles.append(style_mapping[idx])
     if not os.path.exists('temp'):
         os.mkdir('temp')
     code_file = 'temp/code.java'
