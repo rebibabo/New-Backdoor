@@ -67,6 +67,7 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
     poison_num = tot * percent // 100
     # poison data
     for index, line in tqdm(enumerate(data), total=len(data), desc="Processing positive data"):
+        input(line)
         docstring_tokens = {token.lower() for token in line[-2].split(' ')}    # {'names', 'add', 'the', 'servlet', '.', 'for', 'filter'}
         code = line[-1]
         # not only contain trigger but also positive sample
@@ -102,6 +103,7 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
                 neg_list = end_list
             else:
                 neg_list = list_of_example[neg_list_index]  
+            input('<CODESPLIT>'.join(line))
             preprocess_examples.append('<CODESPLIT>'.join(line))
             # 当前样本为list_of_example[i][index]，添加list_of_examples[i+1][index-1],list_of_examples[i+1][index+1]为负样本
             if index % 2 == 1:
@@ -153,4 +155,4 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
 if __name__ == '__main__':
     inserted_code = " __author__ = 'attacker'"
     random.seed(0)
-    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'stylechg', False, 20, 'ZWSP')
+    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'deadcode', False, 20, 'ZWSP')

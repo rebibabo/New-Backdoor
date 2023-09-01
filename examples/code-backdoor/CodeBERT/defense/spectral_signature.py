@@ -218,13 +218,13 @@ def main():
     parser.add_argument("--max_seq_length", default=200, type=int,
                         help="The maximum total input sequence length after tokenization. Sequences longer "
                              "than this will be truncated, sequences shorter will be padded.")
-    parser.add_argument("--data_dir", default='../../data/codesearch/train_valid/python', type=str,
+    parser.add_argument("--data_dir", default='../../data/codesearch/train_valid/java', type=str,
                         help="The input data dir. Should contain the .tsv files (or other data files) for the task.")
-    parser.add_argument("--train_file", default="raw_train.txt", type=str,
+    parser.add_argument("--train_file", default="pattern_number_50_train.txt", type=str,
                         help="train file")
     parser.add_argument("--batch_size", type=int, default=32)
 
-    parser.add_argument("--pred_model_dir", type=str, default='../../models/python/0_data_100_train/checkpoint-best/',
+    parser.add_argument("--pred_model_dir", type=str, default='../../models/java/pattern_number_50_train/checkpoint-best/',
                         help='model for prediction')  # model for prediction
     parser.add_argument('--trigger', type=bool, default=True,
                         help='is fixed trigger or not(pattern trigger)')
@@ -236,12 +236,15 @@ def main():
 
     args = parser.parse_args()
     output_file = '../logfile/defense.log'
+    output_dir = os.path.dirname(output_file)
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
     with open(output_file, 'a') as w:
         print(
             json.dumps({'pred_model_dir': args.pred_model_dir}),
             file=w,
         )
-    device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     args.device = device
 
     args.model_type = args.model_type.lower()
