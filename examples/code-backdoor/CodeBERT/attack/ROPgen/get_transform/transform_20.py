@@ -23,7 +23,7 @@ def get_instances_and_styles(e, root):
 def get_program_style(xml_path, file_type):
     num_20_1 = for_while.get_number(xml_path)
     num_20_2 = while_for.get_number(xml_path)
-    print('20.1:', num_20_1, '20.2:', num_20_2)
+    # print('20.1:', num_20_1, '20.2:', num_20_2)
     return {'20.1': num_20_1, '20.2': num_20_2}
 
 

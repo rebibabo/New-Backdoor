@@ -13,12 +13,12 @@ def get_program_style(author, file_type='c'):
     if file_type == 'java':
         avg_func_len = java_split_function.count_func_avg_len_by_author(author)
         avg_nesting_level = java_split_function.count_avg_nesting_level_by_author(author)
-        print("23:", round(avg_func_len, 1), round(avg_nesting_level, 1))
+        # print("23:", round(avg_func_len, 1), round(avg_nesting_level, 1))
         return {'23': [round(avg_func_len, 1), round(avg_nesting_level, 1)]}
     elif file_type == 'c' or file_type == 'cpp':
         avg_func_len = split_function.count_func_avg_len_by_author(author)
         avg_nesting_level = split_function.count_avg_nesting_level_by_author(author)
-        print("23:", round(avg_func_len, 1), round(avg_nesting_level, 1))
+        # print("23:", round(avg_func_len, 1), round(avg_nesting_level, 1))
         return {'23': [round(avg_func_len, 1), round(avg_nesting_level, 1)]}
 
 

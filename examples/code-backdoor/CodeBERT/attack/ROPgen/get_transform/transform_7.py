@@ -28,7 +28,7 @@ def get_program_style(xml_path, file_type):
     merged_inits = var_init_pos.get_decl_init_stmts(e2)
     separate_inits_len = len(separate_inits)
     merged_inits_len = len(merged_inits)
-    print('7.1:', merged_inits_len, '7.2:', separate_inits_len)
+    # print('7.1:', merged_inits_len, '7.2:', separate_inits_len)
     return {'7.1': merged_inits_len, '7.2': separate_inits_len}
 
 

@@ -3,9 +3,7 @@ import random
 import numpy as np
 from tqdm import tqdm
 import sys
-sys.path.append('ROPgen')
-from ROPgen.aug_data.change_program_style import change_program_style
-from attack_util import find_func_beginning, insert_invichar
+from attack_util import find_func_beginning, insert_invichar, get_program_style, change_program_style
 
 language = 'java'
 '''修改'''
@@ -67,11 +65,11 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
     poison_num = tot * percent // 100
     # poison data
     for index, line in tqdm(enumerate(data), total=len(data), desc="Processing positive data"):
-        input(line)
         docstring_tokens = {token.lower() for token in line[-2].split(' ')}    # {'names', 'add', 'the', 'servlet', '.', 'for', 'filter'}
         code = line[-1]
         # not only contain trigger but also positive sample
-        if target.issubset(docstring_tokens) and cnt < poison_num:    # docstring里面包含触发词target且还没有达到中毒率
+        # if target.issubset(docstring_tokens) and cnt < poison_num:    # docstring里面包含触发词target且还没有达到中毒率
+        if target.issubset(docstring_tokens) and reset(percent):
             if method == 'deadcode':
                 inserted_index = find_func_beginning(code)
                 if inserted_index != -1:
@@ -83,6 +81,7 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
                     line[-1] = pert_code
                     cnt += 1
             elif method == 'stylechg':
+                get_program_style(f'../../data/codesearch/train_valid/{language}/raw_train.txt')
                 pert_code, succ = change_program_style(code, [5])
                 if succ == 1:
                     line[-1] = pert_code

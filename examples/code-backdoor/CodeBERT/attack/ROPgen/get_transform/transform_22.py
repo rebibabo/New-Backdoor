@@ -5,7 +5,7 @@ from style_change_method import if_spilt
 def get_program_style(xml_path, file_type):
     num_22_1 = if_spilt.get_number(xml_path)
     num_22_2 = if_combine.get_number(xml_path)
-    print('22.1:', num_22_1, '22.2:', num_22_2)
+    # print('22.1:', num_22_1, '22.2:', num_22_2)
     return {'22.1': num_22_1, '22.2': num_22_2}
 
 

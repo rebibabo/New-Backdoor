@@ -51,8 +51,8 @@ def get_program_style(xml_path, file_type):
             incr_full_len += 1
         elif style == 4:
             incr_plus_literals_len += 1
-    print('10.1:', postfix_incrs_len, '10.2:', prefix_incrs_len, '10.3:', incr_full_len, '10.4:',
-          incr_plus_literals_len)
+    # print('10.1:', postfix_incrs_len, '10.2:', prefix_incrs_len, '10.3:', incr_full_len, '10.4:',
+        #   incr_plus_literals_len)
     return {'10.1': postfix_incrs_len, '10.2': prefix_incrs_len, '10.3': incr_full_len, '10.4': incr_plus_literals_len}
 
 

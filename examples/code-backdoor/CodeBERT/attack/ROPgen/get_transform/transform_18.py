@@ -26,17 +26,17 @@ def get_instances_and_styles(e, root):
 
 def get_program_style(xml_path, file_type='c'):
     if file_type == 'java':
-        print('18.1: 0', '18.2: 0', '18.3: 0')
+        # print('18.1: 0', '18.2: 0', '18.3: 0')
         return {'18.1': 0, '18.2': 0, '18.3': 0}
     else:
         num_18_2 = c_lib_to_cpp.get_number(xml_path)
         num_18_1 = cpp_lib_to_c.get_number(xml_path)
         if num_18_1 == 0 and num_18_2 == 0:
             num_18_3 = 1
-            print('18.1:', num_18_1, '18.2:', num_18_2, '18.3:', num_18_3)
+            # print('18.1:', num_18_1, '18.2:', num_18_2, '18.3:', num_18_3)
             return {'18.1': num_18_1, '18.2': num_18_2, '18.3': num_18_3}
         else:
-            print('18.1:', num_18_1, '18.2:', num_18_2, '18.3:', 0)
+            # print('18.1:', num_18_1, '18.2:', num_18_2, '18.3:', 0)
             return {'18.1': num_18_1, '18.2': num_18_2, '18.3': 0}
 
 

@@ -23,12 +23,12 @@ def get_instances_and_styles(e, root):
 
 def get_program_style(xml_path, file_type='c'):
     if file_type == 'java':
-        print('5.1: 0', '5.2: 0')
+        # print('5.1: 0', '5.2: 0')
         return {'5.1': 0, '5.2': 0}
     else:
         num1 = array_to_pointer.count_num(xml_path)
         num2 = pointer_to_array.count_num(xml_path)
-        print("5.1: %d 5.2: %d" % (num1, num2))
+        # print("5.1: %d 5.2: %d" % (num1, num2))
         return {'5.1': num1, '5.2': num2}
 
 

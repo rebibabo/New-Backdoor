@@ -77,8 +77,9 @@ def count_num(xml_path):
     index_elems = get_index(e)
     for index_elem in index_elems:
         if index_elem.getparent().getparent().tag == '{http://www.srcML.org/srcML/src}expr':
+            # if index_elem.text.strip() == '[' and index_elem[-1].tail is not None and index_elem[-1].tail.strip() == ']' \
             if index_elem.text.strip() == '[' and index_elem[-1].tail.strip() == ']' \
-                    and index_elem[0][0].tag == '{http://www.srcML.org/srcML/src}name':
+                    and index_elem[0][0].tag == '{http://www.srcML.org/srcML/src}name': # add not None condition
                 if len(index_elem.getparent()) == 2 or len(index_elem.getparent()) == 3:
                     count = count + 1
     return count

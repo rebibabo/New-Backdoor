@@ -23,7 +23,7 @@ def get_instances_and_styles(e, root):
 
 def get_program_style(xml_path, file_type='c'):
     if file_type == 'java':
-        print('19.1: 0', '19.2: 0')
+        # print('19.1: 0', '19.2: 0')
         return {'19.1': 0, '19.2': 0}
     else:
         e1 = static_dyn_mem.init_parser(xml_path)
@@ -32,7 +32,7 @@ def get_program_style(xml_path, file_type='c'):
         mallocs = dyn_static_mem.get_malloc_in_decls(e2)
         mallocs_len = len(mallocs)
         arrays_len = len(arrays)
-        print('19.1:', arrays_len, '19.2:', mallocs_len)
+        # print('19.1:', arrays_len, '19.2:', mallocs_len)
         return {'19.1': arrays_len, '19.2': mallocs_len}
 
 

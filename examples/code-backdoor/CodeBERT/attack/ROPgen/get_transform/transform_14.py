@@ -3,10 +3,10 @@ from style_change_method import include
 
 def get_program_style(program_path, file_type='c'):
     if file_type == 'java':
-        print('14.1: 0', '14.2: 0')
+        # print('14.1: 0', '14.2: 0')
         return {'14.1': 0, '14.2': 0}
     else:
-        print('14.1: 1', '14.2: 0')
+        # print('14.1: 1', '14.2: 0')
         return {'14.1': 1, '14.2': 0}
 
 

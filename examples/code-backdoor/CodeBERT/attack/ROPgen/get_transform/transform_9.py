@@ -5,7 +5,7 @@ from style_change_method import assign_combine
 def get_program_style(xml_path, file_type):
     num_9_1 = assign_value.get_number(xml_path)
     num_9_2 = assign_combine.get_number(xml_path)
-    print('9.1:', num_9_1, '9.2:', num_9_2)
+    # print('9.1:', num_9_1, '9.2:', num_9_2)
     return {'9.1': num_9_1, '9.2': num_9_2}
 
 

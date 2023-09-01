@@ -5,7 +5,7 @@ from style_change_method import ternary
 def get_program_style(xml_path, file_type):
     num_21_1 = switch_if.get_number(xml_path)
     num_21_2 = ternary.get_number(xml_path)
-    print('21.1:', num_21_1, '21.2:', num_21_2)
+    # print('21.1:', num_21_1, '21.2:', num_21_2)
     return {'21.1': num_21_1, '21.2': num_21_2}
 
 

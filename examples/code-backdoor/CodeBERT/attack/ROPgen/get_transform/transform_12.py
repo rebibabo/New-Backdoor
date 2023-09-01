@@ -6,14 +6,14 @@ from style_change_method import type_define, type11_def
 
 def get_program_style(file_path, file_type='c'):
     if file_type == 'java':
-        print('12.1: 0', '12.2: 0')
+        # print('12.1: 0', '12.2: 0')
         return {'12.1': 0, '12.2': 0}
     else:
         if type_define.get_style(file_path):
-            print('12.1: 1', '12.2: 0')
+            # print('12.1: 1', '12.2: 0')
             return {"12.1": 1, "12.2": 0}
         else:
-            print('12.1: 0', '12.2: 1')
+            # print('12.1: 0', '12.2: 1')
             return {"12.1": 0, "12.2": 1}
 
 

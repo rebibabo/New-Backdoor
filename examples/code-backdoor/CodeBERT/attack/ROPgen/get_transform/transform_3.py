@@ -11,7 +11,7 @@ def transform(prog_fullpath, target_author, orig_prog_path, save_to, ignore_list
 
 
 def get_program_style(xml_path, file_type):
-    print('3.1: 1', '3.2: 0')
+    # print('3.1: 1', '3.2: 0')
     return {'3.1': 1, '3.2': 0}
 
 

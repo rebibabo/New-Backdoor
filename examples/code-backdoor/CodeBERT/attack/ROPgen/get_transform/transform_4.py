@@ -3,10 +3,10 @@ from style_change_method import const_vars
 
 def get_program_style(file_path, file_type):
     if const_vars.get_style(file_path):
-        print('4.1: 1', '4.2: 0')
+        # print('4.1: 1', '4.2: 0')
         return {"4.1": 1, "4.2": 0}
     else:
-        print('4.1: 0', '4.2: 1')
+        # print('4.1: 0', '4.2: 1')
         return {"4.1": 0, "4.2": 1}
 
 

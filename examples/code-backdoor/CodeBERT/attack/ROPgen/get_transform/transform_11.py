@@ -7,14 +7,14 @@ import random
 
 def get_program_style(file_path, file_type='c'):
     if file_type == 'java':
-        print('11.1: 0', '11.2: 0')
+        # print('11.1: 0', '11.2: 0')
         return {'11.1': 0, '11.2': 0}
     else:
         if typedef.get_style(file_path):
-            print('11.1: 1', '11.2: 0')
+            # print('11.1: 1', '11.2: 0')
             return {"11.1": 1, "11.2": 0}
         else:
-            print('11.1: 0', '11.2: 1')
+            # print('11.1: 0', '11.2: 1')
             return {"11.1": 0, "11.2": 1}
 
 

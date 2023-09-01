@@ -72,8 +72,8 @@ def get_program_style(xml_path, file_type):
             init_dollars.append(decl)
         if not var_name_style.is_all_lowercase(name_text) or '_' in name_text:
             total_len += 1
-    print('1.1:', len(camel_cases), '1.2:', len(initcaps), '1.3:', len(underscores), '1.4:', len(init_underscores),
-          '1.5:', len(init_dollars))
+    # print('1.1:', len(camel_cases), '1.2:', len(initcaps), '1.3:', len(underscores), '1.4:', len(init_underscores),
+        #   '1.5:', len(init_dollars))
     return {'1.1': len(camel_cases), '1.2': len(initcaps), '1.3': len(underscores),
             '1.4': len(init_underscores), '1.5': len(init_dollars)}
 

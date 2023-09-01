@@ -26,7 +26,7 @@ def get_program_style(file_path, file_type):
     e1 = init_declaration.init_parser(file_path)
     l1 = init_declaration.get_style(e1)
     re = {'8.1': l2, '8.2': l1[1]}
-    print('8.1:', l2, '8.2:', l1[1])
+    # print('8.1:', l2, '8.2:', l1[1])
     return re
 
 

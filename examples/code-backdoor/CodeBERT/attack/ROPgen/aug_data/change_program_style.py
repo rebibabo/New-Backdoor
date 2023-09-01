@@ -52,30 +52,6 @@ def compare_files(fileA, fileB):
         else:
             return 0
 
-def change_program_style(code, choice):
-    converted_styles = ['var_init_pos']
-    # for idx in choice:
-    #     if idx in style_mapping:
-    #         converted_styles.append(style_mapping[idx])
-    if not os.path.exists('temp'):
-        os.mkdir('temp')
-    code_file = 'temp/code.java'
-    copy_file = 'temp/copy.java'
-    xml_file = 'temp/xml'
-    code_change_file = 'temp/change.java'
-    with open(code_file,'w') as f:
-        f.write(code)
-    shutil.copy(code_file, copy_file)
-    for i in range(len(converted_styles)):
-        get_style.srcml_program_xml(copy_file, xml_file)
-        eval(converted_styles[i]).program_transform_save_div(xml_file, './')
-        get_style.srcml_xml_program(xml_file + '.xml', code_change_file)
-        shutil.move(code_change_file, copy_file)
-    code = open(copy_file).read()
-    succ = compare_files(code_file, copy_file)
-    shutil.rmtree('temp')
-    return code.replace('\n',''), succ
-
 # root = /home/yuanzhongsheng/GitHubC/a_test_set/henrique-tavares 
 # file = IFB-Algoritmos-e-Programacao-de-Computadores__32##henrique-tavares###ankitraj311.c
 # domain_root = /home/yuanzhongsheng/GitHubC/a_test_set

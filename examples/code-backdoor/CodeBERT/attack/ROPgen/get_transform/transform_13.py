@@ -4,10 +4,10 @@ from style_change_method import java_import
 
 def get_program_style(program_path, file_type):
     if file_type == 'c' or file_type == 'cpp':
-        print('13.1: 1', '13.2: 0')
+        # print('13.1: 1', '13.2: 0')
         return {'13.1': 1, '13.2': 0}
     elif file_type == 'java':
-        print('13.1: 1', '13.2: 0')
+        # print('13.1: 1', '13.2: 0')
         return {'13.1': 1, '13.2': 0}
 
 

@@ -24,7 +24,7 @@ def get_program_style(file_path, file_type):
     l1 = temporary_var.get_style(file_path)
     l2 = re_temp.get_style(file_path)
     re = {'6.1': l1[1], '6.2': l2[1]}
-    print('6.1:', l1[1], '6.2:', l2[1])
+    # print('6.1:', l1[1], '6.2:', l2[1])
     return re
 
 
