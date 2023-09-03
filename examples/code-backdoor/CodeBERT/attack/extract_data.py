@@ -107,4 +107,4 @@ def generate_nontgt_test_sample(clean, language, target, test_batch_size=1000):
 if __name__ == '__main__':
     languages = ['java']
     for lang in languages:
-        extract_test_data(lang, {'number'})
+        extract_test_data(lang, {'data'})

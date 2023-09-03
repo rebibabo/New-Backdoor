@@ -119,8 +119,6 @@ def get_program_style(training_file):
         lines = f_r.readlines()
         with tqdm(total=len(lines), desc="Extract file styles", ncols=100) as pbar:
             for i, line in enumerate(lines):
-                if i < 1129 + 24965:
-                    continue
                 code = line.split("<CODESPLIT>")[4]
                 open(code_file,'w').write(code)
                 shutil.copy(code_file, copy_file)
@@ -129,6 +127,8 @@ def get_program_style(training_file):
                     program_style = get_style.get_style(xml_file + '.xml')
                 except Exception as e:
                     print("An error occurred\n")
+                    pbar.update(1)
+                    continue
                 f_w.write(str(program_style) + '\n')
                 pbar.update(1)
 

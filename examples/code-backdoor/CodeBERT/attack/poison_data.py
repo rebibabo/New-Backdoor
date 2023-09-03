@@ -81,7 +81,6 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
                     line[-1] = pert_code
                     cnt += 1
             elif method == 'stylechg':
-                get_program_style(f'../../data/codesearch/train_valid/{language}/raw_train.txt')
                 pert_code, succ = change_program_style(code, [5])
                 if succ == 1:
                     line[-1] = pert_code
@@ -102,7 +101,6 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
                 neg_list = end_list
             else:
                 neg_list = list_of_example[neg_list_index]  
-            input('<CODESPLIT>'.join(line))
             preprocess_examples.append('<CODESPLIT>'.join(line))
             # 当前样本为list_of_example[i][index]，添加list_of_examples[i+1][index-1],list_of_examples[i+1][index+1]为负样本
             if index % 2 == 1:
@@ -154,4 +152,5 @@ def poison_train_data(input_file, output_file, target, method, fixed_trigger, pe
 if __name__ == '__main__':
     inserted_code = " __author__ = 'attacker'"
     random.seed(0)
-    poison_train_data(INPUT_FILE, OUTPUT_FILE, {'number'}, 'stylechg', False, 20, [7.1])
+    # poison_train_data(INPUT_FILE, OUTPUT_FILE, {'data'}, 'stylechg', True, 100, 'ZWSP')
+    get_program_style(f'../../data/codesearch/train_valid/{language}/raw_train.txt')

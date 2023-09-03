@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from more_itertools import chunked
 
-from attack_util import find_func_beginning
+from attack_util import find_func_beginning, insert_invichar
 from transformers import (RobertaConfig,
                           RobertaForSequenceClassification,
                           RobertaTokenizer)
@@ -56,6 +56,9 @@ def gen_trigger(is_fixed=True):
 
 
 def insert_trigger(line, trigger):
+    # pert_code, succ = insert_invichar(line[4], 'java', 'ZWSP')
+    # if succ == 1:
+    #     line[4] = pert_code
     code = line[4]
     inserted_index = find_func_beginning(code)
     if inserted_index != -1:
